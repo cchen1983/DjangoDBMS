@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#purchasing" data-toggle="tab">Purchasing</a></li>
+            <li><a href="#membership" data-toggle="tab">Membership</a></li>
+            <li><a href="#expenditure" data-toggle="tab">Expenditure</a></li>
+        </ul>
+    </div>
+
+    <div class="col-md-9">
+        <div class="tab-content">
+            <div id="purchasing" class="tab-pane active">
+                <br>
+                <button id="btn_prc_new" type="button" class="btn btn-default btn-block">Purchasing</button>
+                <div id="prc-reg-view"></div>
+            </div>
+
+            <div id="membership" class="tab-pane">
+                <br>
+                <button id="btn_memb_new" type="button" class="btn btn-default btn-block">New membership</button>
+                <button id="btn_memb_recharge" type="button" class="btn btn-default btn-block">Membership deposit</button>
+                <br>
+                <div id="mem-reg-view"></div>
+            </div> 
+
+            <div id="expenditure" class="tab-pane">
+                <br>
+                <button id="btn_exp_product" type="button" class="btn btn-default btn-block">Stock</button>
+                <button id="btn_exp_other" type="button" class="btn btn-default btn-block">Others</button>
+                <br>
+                <div id="exp-reg-view"></div>
+            </div>
+        </div> <!-- tab-content -->
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/apps/workflow/workflow.js"></script>
+{% endblock %}

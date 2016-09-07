@@ -1,0 +1,75 @@
+<div class="container" style="width:450px;height:400px;">
+    <div id="register">
+        <form method="POST" id="exp_prod_form">{% csrf_token %}
+            <div><label>Stock In</label></div>
+            <div class="form-group">
+                <label>Stock</label>
+                <select id="prod_sel" name="product" class="form-control" required>
+                    <option disabled selected value> -- select an option -- </option>
+                    <option value="new">New stock</option>
+                    {% for prod in products %}
+                    <option value="{{prod.id}}">{{prod.name}}</option>
+                    {% endfor %}
+                </select>
+                <input name="product_new" type="text" class="form-control" placeholder="Name" style="display:none" disabled>
+                <input name="product_price" type="text" class="form-control" placeholder="Price" style="display:none" disabled>
+            </div>
+            <div class="form-group">
+                <label>Count</label>
+                <input name="count" type="text" class="form-control" placeholder="Count">
+            </div>
+            <div class="form-group">
+                <label>Payment</label>
+                <input name="payment" type="text" class="form-control" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Details</label>
+                <input name="details" type="text" class="form-control" placeholder="Details">
+            </div>
+            <div class="row">
+                <input name="Register" value="true" type="hidden"></input>
+                <button type="submit" class="btn btn-default">Submit</button>
+                <span id="register_error" class="custom-alert-msg" style="padding: 6px;"></span>
+            <div>
+        </form>
+    </div>
+</div>
+
+<script>
+$(function() {
+    $('#prod_sel').change(function(){
+        if ($('#prod_sel').val() == "new") {
+            $('[name="product_new"]').prop('disabled', false)
+            $('[name="product_price"]').prop('disabled', false)
+            $('[name="product_new"]').show()
+            $('[name="product_price"]').show()
+        }
+        else {
+            $('[name="product_new"]').prop('disabled', true)
+            $('[name="product_price"]').prop('disabled', true)
+            $('[name="product_new"]').hide()
+            $('[name="product_price"]').hide()
+        }        
+    });
+
+    $('#exp_prod_form').submit(function(e) {
+        $.ajax({
+            type: "POST",
+            url: "/workflow/exp-product-reg/",
+            data: $(this).serialize(),
+
+            success: function(resp) {
+                if (resp == 'OK') {
+                    $("#exp-reg-view").html("Stock in successed!");
+                }
+                else {
+                    $("#register_error").text('error' + resp);
+                    $("#register_error").show()
+                }
+            }
+        });
+
+        return false;
+    });
+});
+</script>

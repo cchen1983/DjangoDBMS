@@ -1,0 +1,87 @@
+<table class="table table-bordered">
+    <div class="thead">
+        <div class="tr">
+        <div class="td">*</div>
+        {% for name in fdNames %}
+        <div class="td">{{name}}</div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="tbody">
+        <span id="submit_error" class="custom-alert-msg" style="padding: 6px;"></span>
+        {% for tp in tuples %}
+        <div class="tr">{% csrf_token %}
+            <div class="td ed action"><button id="ebut-{{tp.0}}" type="button" onclick="edit(this);">edit</button></div>
+            {% for val in tp %}
+            {% if forloop.counter0 == 0 %}
+            <div class="td id">{{val}}</div>
+            {% else %}
+            <div class="td ed">{{val}}</div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</table>
+
+<script>
+function edit(element){
+    var tr = jQuery(element).parent().parent();
+    if(!tr.hasClass("editing")) {
+        tr.addClass("editing");
+        tr.find("DIV.td.id").each(function(){
+            jQuery(this).removeClass("editing");
+        });
+        tr.find("DIV.td.ed").each(function(){
+            if(!jQuery(this).hasClass("action")){
+                var value = jQuery(this).text();
+                jQuery(this).text("");
+                jQuery(this).append('<input type="text" value="'+value+'" />');
+            } else {
+                jQuery(this).find("BUTTON").text("save");
+            }
+        });
+    } else {
+        var newTp = {"tblName":tblName, "tuple[]":[]}
+        tr.find("DIV.td.id").each(function(){
+            var value = jQuery(this).text();
+            newTp["tuple[]"].push(value);
+        });
+        tr.find("DIV.td.ed").each(function(){
+            if(!jQuery(this).hasClass("action")){
+                var value = jQuery(this).find("INPUT").val();
+                newTp["tuple[]"].push(value);
+            }
+        }); 
+             
+        console.log(newTp);
+        $.ajax({
+            type: "POST",
+            url: "/query/tuple-update/",
+            data: newTp,
+
+            success: function(data) {
+                if (data != 'OK') {
+                    $("#submit_error").text(data);
+                    $("#submit_error").show();
+                }
+                else {
+                    $("#submit_error").hide();
+                    tr.removeClass("editing");
+                    tr.find("DIV.td").each(function(){
+                        if(!jQuery(this).hasClass("action")){
+                            var value = jQuery(this).find("INPUT").val();
+                            jQuery(this).text(value);
+                            jQuery(this).find("INPUT").remove();
+                        } else {
+                            jQuery(this).find("BUTTON").text("edit");
+                        }
+                    });
+                }    
+            }
+            
+        });
+
+    }
+}
+</script>

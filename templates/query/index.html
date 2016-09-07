@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#query" data-toggle="tab">Query and Edit</a></li>
+            <li><a href="#backup" data-toggle="tab">Backup and Restore</a></li>
+        </ul>
+    </div>
+
+    <div class="col-md-9">
+        <div class="tab-content">
+            <div id="query" class="tab-pane active">
+                <br>
+                <form id="query_form" method="POST" action="{% url 'cond-query' %}">{% csrf_token %}
+                    <label>Select Class：<select id="tbl_sel" name="tblName" type="text">
+                    <option disabled selected value> -- select an option -- </option>
+                    {% for tbl in tbls %}
+                    <option value="{{tbl}}">{{tbl}}</option>
+                    {% endfor %}
+                    </select></label>
+                    <div id="query_submit" style="display:none;">
+                        <label>Search attribute：<select id="fd_sel" name="fdName" type="text">
+                        </select></label>
+                        <label>Attribute value：<input type="text" name="fdValue"></input></label>
+                        <br>
+                        <input type="submit" value="Search">
+                    </div>
+                </form>
+                <br><br>
+                <div id="table_view"> 
+                </div>
+           </div>
+
+            <div id="backup" class="tab-pane">
+            </div>
+
+        </div> <!-- tab-content -->
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/apps/query/query_edit.js"></script>
+{% endblock %}
