@@ -1,3 +1,6 @@
+# Django View Handler for Query Page
+# cchen @ 2016.9.6
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template import RequestContext, loader
@@ -15,6 +18,7 @@ def isModelInstance(x):
             return True
     return False
 
+# Search by condition
 @login_required
 def cond_query(request):
     fdName = request.POST.get('fdName')
@@ -40,6 +44,7 @@ def cond_query(request):
         for name in fieldNames:
             o = getattr(obj, name)
             if isModelInstance(o):
+                # Just show id for foreginkey object
                 o = o.id
             elif isinstance(o, datetime.date) or isinstance(o, datetime.datetime):
                 o = str(o)
@@ -52,6 +57,7 @@ def cond_query(request):
 def index(request):
     return render(request, 'query/index.html', {'tbls':TBL_NAME_LIST})
 
+# Retrieving meta-data of requested model
 @login_required
 def get_meta_fields(request):
     tblName = request.POST.get('tblName')
@@ -61,6 +67,7 @@ def get_meta_fields(request):
         fieldNames.append(fd.name)
     return JsonResponse(fieldNames, safe=False)
 
+# Update user input to database
 @login_required
 def tuple_update(request):
     tblName = request.POST.get('tblName')
@@ -77,6 +84,7 @@ def tuple_update(request):
             print getattr(obj, fd.name)
             print isModelInstance(getattr(obj, fd.name))
             if idx > 0 and not isModelInstance(getattr(obj, fd.name)):
+                # Filter the foreginkey object out of iteration
                 print fd.name, tp[idx]
                 setattr(obj, fd.name, tp[idx])
             idx = idx + 1

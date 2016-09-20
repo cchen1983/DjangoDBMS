@@ -1,3 +1,6 @@
+# cchen @ 2016.08.30
+# User Account Login/Register Handler
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -31,7 +34,8 @@ def login_box(request):
             username = request.POST.get('newusername')
             password = request.POST.get('npassword')
             email = request.POST.get('email')
-    
+
+            # Check if the user name exsists. 
             try:
                 User.objects.get(username = username)
                 resp_msg = 'USER_EXIST'

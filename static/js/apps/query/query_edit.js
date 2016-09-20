@@ -1,3 +1,6 @@
+/* Saheed @ 2016.09.06
+ * Query: Advance searching and editing of Data Models 
+ */
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -37,7 +40,7 @@ $(function() {
             data: {"tblName" : tblName},
 
             success: function(data) {
-                $("#fd_sel").empty();
+                $("#fd_sel").empty(); /*Clear previous records*/
                 for (var i in data){
                     $("#fd_sel").append($("<option/>", {value:data[i], text:data[i]}));
                 }

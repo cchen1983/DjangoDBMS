@@ -1,3 +1,6 @@
+/* cchen @ 2016.09.01
+ * User Account Login/Signup
+ */
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -41,7 +44,7 @@ $(function() {
         fitToView:  false,
         //autoSize:   false,
 
-        /*Notes: fancybox content could only be selected after show, 
+        /*cchen Notes: fancybox content could only be selected after show, 
         *jquery object or doms are not ready at the timing of afterLoad*/
         afterShow:  function() {
            hook();

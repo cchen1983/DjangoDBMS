@@ -1,3 +1,6 @@
+# Data Models
+# cchen @ 2016.09.02
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -19,6 +22,8 @@ class Customer(models.Model):
     gender = models.CharField(max_length=16)
     birthday = models.DateField()
     
+    # cchen @ 2016.09.10:
+    #   Add unique constraints for name+phone combination 
     class Meta:
         unique_together = ('name', 'phone')
 

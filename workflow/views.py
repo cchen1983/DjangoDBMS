@@ -1,3 +1,6 @@
+# Django View Handler for Workflow page
+# cchen @ 2016.09.09
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template import RequestContext, loader
@@ -14,6 +17,7 @@ from decimal import Decimal
 def index(request):
     return render(request, 'workflow/index.html')
 
+# Membership Verification
 @login_required
 def check_membership(request):
     membershipNo = request.POST.get('membershipNo')
@@ -26,6 +30,7 @@ def check_membership(request):
 
     return HttpResponse(resp)
 
+# Working Form Render
 @login_required
 def reg_form_view(request):
     tp = request.GET.get('type')
@@ -42,6 +47,7 @@ def reg_form_view(request):
         products = Product.objects.all()
         return render(request, 'workflow/prc_new.html', {'products': products})
 
+# Membership register handler
 @login_required
 def add_new_member(request):
     name = request.POST.get('name')
@@ -69,6 +75,7 @@ def add_new_member(request):
 
     return HttpResponse(resp)
 
+# Membership balance recharging
 @login_required
 def member_recharge(request):
     membershipNo = request.POST.get('membershipNo')
@@ -86,6 +93,7 @@ def member_recharge(request):
 
     return HttpResponse(resp)
 
+# Products new/update handler 
 @login_required
 def exp_product_reg(request):
     resp = 'OK'
@@ -119,6 +127,7 @@ def exp_product_reg(request):
 
     return HttpResponse(resp)
 
+# Ohter expenditures handler
 @login_required
 def exp_other_reg(request):
     resp = 'OK'
@@ -135,6 +144,7 @@ def exp_other_reg(request):
 
     return HttpResponse(resp)
 
+# Customer Purchasing Handler
 @login_required
 def purc_reg(request):
     resp = 'OK'

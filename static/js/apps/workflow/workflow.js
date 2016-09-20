@@ -1,3 +1,7 @@
+/* Yihang Zhao @ 2016.09.03
+ * Workflow JS:
+ *   Perparing working forms
+ */
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -30,6 +34,7 @@ $.ajaxSetup({
 
 $(function() {
     function reg_form_get(e) {
+        /*Form Rendering*/
         $.ajax({
             type: "GET",
             url: "/workflow/reg-form-view/",
