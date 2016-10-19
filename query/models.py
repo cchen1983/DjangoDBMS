@@ -51,4 +51,36 @@ class Expenditure(models.Model):
     payment = models.DecimalField(max_digits=19, decimal_places=2)
     details = models.CharField(max_length=255)
     productNo = models.ForeignKey(Product, related_name='buyingIn', blank=True, null=True, on_delete=models.SET_NULL)
-    count = models.BigIntegerField(null=True) 
+    count = models.BigIntegerField(null=True)
+
+TGT_ALL = 'All'
+TGT_MEMBER = 'Member'
+TGT_BD = 'Birthday' 
+
+PROMO_N_GET_1 = 'PM_N1'
+PROMO_DISCOUNT = 'PM_DC'
+
+__active_discount = None
+
+class Activity(models.Model):
+    valid_thru = models.DateTimeField(auto_now_add=True)
+    details = models.CharField(max_length=255)
+    target = models.CharField(max_length=32)
+    
+class Discount(Activity):
+    discount = models.DecimalField(max_digits=19, decimal_places=2) 
+
+    def save(self):
+        if __active_discount != self:
+            __active_discount = self
+ 
+    def delete(self):
+        if __active_discount == self:
+            __active_discount = null
+        
+
+class Promotion(Activity):
+    productNo = models.ForeignKey(Product, related_name='Promotion', blank=True, null=True, on_delete=models.SET_NULL)
+    pmType = models.CharField(max_length=32) 
+    n1 = models.BigIntegerField(null=True)
+    discount = models.DecimalField(max_digits=19, decimal_places=2)
