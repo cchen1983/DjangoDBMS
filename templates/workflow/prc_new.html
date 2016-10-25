@@ -68,6 +68,33 @@ $(function() {
         var payment = $('[name="payment"]').val();
         var price = $('[name="price"]').val();
         var count = $('[name="count"]').val();
+        var disc = 1.0;
+        var n1 = 0;
+        var disc_tgt = 'All';
+        var promo_tgt = 'All';
+        var thres = price * count;
+
+        $.ajax({
+            type: "POST",
+            url: "/workflow/act-info-get/",
+            data: data,
+            async: false,
+            timeout: 3000,
+        
+            success: function(json) {
+                console.log(json);
+                disc = json.disc;
+                n1 = json.n1;
+                disc_tgt = json.disc_tgt;
+                promo_tgt = json.promo_tgt;
+                if (n1 > 0 && count >= n1) {
+                    thres = (count - 1) * price;
+                }
+                else if (disc < 1.0) {
+                    thres = count * price * disc;
+                }
+            },
+        });
 
         if (memNo) {
             $.ajax({
@@ -95,13 +122,13 @@ $(function() {
                 }
             });
         }
-        else if (payment < (price * count)) {
+        else if (payment < thres) {
             $("#register_error").text('Not enough payment amount!');
             $("#register_error").show()
             error_happens = true
         }
 
-        if (memNo && ((balance + payment) < (price * count))) {
+        if (memNo && ((balance + payment) < thres)) {
             $("#register_error").text('Not enough payment+balance!');
             $("#register_error").show()
             error_happens = true

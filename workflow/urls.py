@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^purc-reg/', views.purc_reg, name="purc-reg"),
     url(r'^act-promo-reg/', views.act_promo_reg, name="act-promo-reg"),
     url(r'^act-discount-reg/', views.act_discount_reg, name="act-discount-reg"),
+    url(r'^act-info-get/', views.act_info_get, name="act-info-get"),
 ]

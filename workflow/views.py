@@ -1,10 +1,13 @@
 # Django View Handler for Workflow page
 # cchen @ 2016.09.09
 import sys
+import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
+
+from django.core.exceptions import ObjectDoesNotExist
 
 #from mysqlUtils import dbQuery
 
@@ -215,4 +218,31 @@ def act_discount_reg(request):
         resp = sys.exc_info()[0]
         print "Unexpected error:", sys.exc_info()
         
-    return HttpResponse(resp) 
+    return HttpResponse(resp)
+
+# Query discount and promotion info
+@login_required
+def act_info_get(request):
+    productNo = request.POST.get('product')
+    pd = Product.objects.get(id=productNo)
+    n1 = 0
+    disc = 1.0
+    promo_tgt = 'All'
+    disc_tgt = 'All'
+    global active_discount
+    try:
+        if str(pd.promotion) != 'query.Promotion.None':
+            promo = pd.promotion.get()
+            today = datetime.datetime.now().date()
+            if promo.valid_from.date() <= today and promo.valid_to.date() >= today:
+                promo_tgt = promo.target
+                n1 = promo.n1
+
+        if active_discount and active_discount.valid_from.date() <= today and active_discount.valid_to.date() >= today:
+            disc_tgt = active_discount.target
+            disc = active_discount.disc
+    except ObjectDoesNotExist:
+        print 'n1: ' + n1
+        print 'disc: ' + disc 
+
+    return JsonResponse({"n1": n1, "disc": disc, "promo_tgt":promo_tgt, "disc_tgt":disc_tgt}) 
