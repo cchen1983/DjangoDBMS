@@ -1,6 +1,6 @@
 # Django View Handler for Workflow page
 # cchen @ 2016.09.09
-
+import sys
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template import RequestContext, loader
@@ -46,6 +46,11 @@ def reg_form_view(request):
     elif tp == 'prc_new':
         products = Product.objects.all()
         return render(request, 'workflow/prc_new.html', {'products': products})
+    elif tp == 'act_promo':
+        products = Product.objects.all()
+        return render(request, 'workflow/act_promo.html', {'products': products})
+    elif tp == 'act_discount':
+        return render(request, 'workflow/act_discount.html')
 
 # Membership register handler
 @login_required
@@ -175,3 +180,39 @@ def purc_reg(request):
     pur.save()
 
     return HttpResponse(resp)
+
+# New Promotion Handler
+@login_required
+def act_promo_reg(request):
+    resp = 'OK'
+    productNo = request.POST.get('product')
+    n1 = request.POST.get('n1')
+    details = request.POST.get('details')
+    valid_from = request.POST.get('valid_from')
+    valid_to = request.POST.get('valid_to')
+    target = request.POST.get('target')
+
+    prod = Product.objects.get(id=productNo)
+    promo = Promotion(productNo=prod, n1=n1, valid_from=valid_from, valid_to=valid_to, details=details, target=target)
+    promo.save()
+    return HttpResponse(resp)
+
+# New Discount Handler
+@login_required
+def act_discount_reg(request):
+    resp = 'OK'
+    discount = request.POST.get('discount')
+    details = request.POST.get('details')
+    valid_from = request.POST.get('valid_from')
+    valid_to = request.POST.get('valid_to')
+    target = request.POST.get('target')
+
+    try:
+        print discount, valid_from, valid_to, target, details
+        dis = Discount(disc=discount, valid_from=valid_from, valid_to=valid_to, details=details, target=target)
+        dis.save()
+    except:
+        resp = sys.exc_info()[0]
+        print "Unexpected error:", sys.exc_info()
+        
+    return HttpResponse(resp) 

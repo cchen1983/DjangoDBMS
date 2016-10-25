@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^exp-other-reg/', views.exp_other_reg, name="exp-other-reg"),
     url(r'^check-membership/', views.check_membership, name="check-membership"),
     url(r'^purc-reg/', views.purc_reg, name="purc-reg"),
+    url(r'^act-promo-reg/', views.act_promo_reg, name="act-promo-reg"),
+    url(r'^act-discount-reg/', views.act_discount_reg, name="act-discount-reg"),
 ]

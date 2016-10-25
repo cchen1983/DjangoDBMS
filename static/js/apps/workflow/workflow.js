@@ -50,4 +50,6 @@ $(function() {
     $('#btn_memb_recharge').click({"type": "mem_rec", "cls": "mem"}, reg_form_get);
     $('#btn_exp_product').click({"type": "exp_prod", "cls": "exp"}, reg_form_get);
     $('#btn_exp_other').click({"type": "exp_other", "cls": "exp"}, reg_form_get);
+    $('#btn_act_promo').click({"type": "act_promo", "cls": "act"}, reg_form_get);
+    $('#btn_act_discount').click({"type": "act_discount", "cls": "act"}, reg_form_get);
 });

@@ -1,0 +1,61 @@
+<div class="container" style="width:450px;height:400px;">
+    <div id="register">
+        <form method="POST" id="act_discount_form">{% csrf_token %}
+            <div><label>New Discount</label></div>
+            <div class="form-group">
+                <label>Valid From</label>
+                <input name="valid_from" type="date" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label>Valid To</label>
+                <input name="valid_to" type="date" class="form-control" >
+            </div>
+            <div class="form-group">
+                <label>Target</label>
+                <select name="target" class="form-control">
+                    <option value="All">All</option>
+                    <option value="Member">Member only</option>
+                    <option value="Birthday">Birthday only</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Discount</label>
+                <input name="discount" type="text" class="form-control" placeholder="1.0">
+            </div>
+            <div class="form-group">
+                <label>Details</label>
+                <input name="details" type="text" class="form-control" placeholder="Details">
+            </div>            
+            <div class="row">
+                <input name="Register" value="true" type="hidden"></input>
+                <button type="submit" class="btn btn-default">Submit</button>
+                <span id="register_error" class="custom-alert-msg" style="padding: 6px;"></span>
+            <div>
+        </form>
+    </div>
+</div>
+
+<script>
+$(function() {
+    
+    $('#act_discount_form').submit(function(e) {
+        $.ajax({
+            type: "POST",
+            url: "/workflow/act-discount-reg/",
+            data: $(this).serialize(),
+
+            success: function(resp) {
+                if (resp == 'OK') {
+                    $("#act-reg-view").html("Create discount successed!");
+                }
+                else {
+                    $("#register_error").text('error' + resp);
+                    $("#register_error").show()
+                }
+            }
+        });
+
+        return false;
+    });
+});
+</script>
