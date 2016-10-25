@@ -64,8 +64,6 @@ TGT_BD = 'Birthday'
 #PROMO_N_GET_1 = 'PM_N1'     # Promotion Buy N get 1
 #PROMO_DISCOUNT = 'PM_DC'    # Promotion Discount
 
-active_discount = None
-
 class Activity(models.Model):
     valid_from = models.DateTimeField(auto_now_add=True)
     valid_to = models.DateTimeField(auto_now_add=True)
@@ -77,18 +75,8 @@ class Discount(Activity):
     disc = models.DecimalField(max_digits=19, decimal_places=2)
 
     def save(self):
-        global active_discount
-        if active_discount != self:
-            active_discount = self
-
+        Discount.objects.all().delete()
         super(Discount, self).save()
- 
-    def delete(self):
-        global active_discount
-        if active_discount == self:
-            active_discount = null
-        
-        super(Discount, self).delete()
         
         
 # Promotion for specific product

@@ -224,25 +224,31 @@ def act_discount_reg(request):
 @login_required
 def act_info_get(request):
     productNo = request.POST.get('product')
-    pd = Product.objects.get(id=productNo)
+
     n1 = 0
     disc = 1.0
     promo_tgt = 'All'
     disc_tgt = 'All'
-    global active_discount
-    try:
-        if str(pd.promotion) != 'query.Promotion.None':
-            promo = pd.promotion.get()
-            today = datetime.datetime.now().date()
-            if promo.valid_from.date() <= today and promo.valid_to.date() >= today:
-                promo_tgt = promo.target
-                n1 = promo.n1
 
+    try:
+        today = datetime.datetime.now().date()
+        dclist = Discount.objects.all()
+        active_discount = None
+        if len(dclist) > 0:
+            active_discount = dclist[0]
         if active_discount and active_discount.valid_from.date() <= today and active_discount.valid_to.date() >= today:
             disc_tgt = active_discount.target
             disc = active_discount.disc
-    except ObjectDoesNotExist:
-        print 'n1: ' + n1
-        print 'disc: ' + disc 
+
+        print "testing"
+        promo = Promotion.objects.get(productNo=productNo)
+        print promo
+        if promo.valid_from.date() <= today and promo.valid_to.date() >= today:
+            promo_tgt = promo.target
+            n1 = promo.n1
+
+    except:
+        print "act_info_get:", sys.exc_info()[0] 
+ 
 
     return JsonResponse({"n1": n1, "disc": disc, "promo_tgt":promo_tgt, "disc_tgt":disc_tgt}) 
