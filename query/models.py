@@ -71,6 +71,7 @@ class Activity(models.Model):
     details = models.CharField(max_length=255)
     target = models.CharField(max_length=32)
 
+# saheed @ 20161010
 # Discount for all products 
 class Discount(Activity):
     disc = models.DecimalField(max_digits=19, decimal_places=2)
