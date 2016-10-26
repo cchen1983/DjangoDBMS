@@ -41,7 +41,8 @@
 </div>
 
 <script>
-$(function() {
+$(function() {      // cchen @ 20160913 @ For Purchasing page interaction.
+    
     $('#prod_sel').change(function(){
         var price = $('#prod_sel option:selected').data('price');
         var count = $('[name="count"]').val();
@@ -74,6 +75,8 @@ $(function() {
         var promo_tgt = 'All';
         var thres = price * count;
 
+        // Saheed @ 20161015
+        // Check Discount and Promotion info for the product
         $.ajax({
             type: "POST",
             url: "/workflow/act-info-get/",
@@ -87,6 +90,8 @@ $(function() {
                 n1 = json.n1;
                 disc_tgt = json.disc_tgt;
                 promo_tgt = json.promo_tgt;
+
+                // update the payment threshold
                 if (n1 > 0 && count >= n1) {
                     thres = (count - 1) * price;
                 }
@@ -96,7 +101,7 @@ $(function() {
             },
         });
 
-        if (memNo) {
+        if (memNo) {    // Membership Validation
             $.ajax({
                 type: "POST",
                 url: "/workflow/check-membership/",
@@ -122,13 +127,13 @@ $(function() {
                 }
             });
         }
-        else if (payment < thres) {
+        else if (payment < thres) {   // Payment amount validation
             $("#register_error").text('Not enough payment amount!');
             $("#register_error").show()
             error_happens = true
         }
 
-        if (memNo && ((balance + payment) < thres)) {
+        if (memNo && ((balance + payment) < thres)) {  // Payment + Account Balance Validation
             $("#register_error").text('Not enough payment+balance!');
             $("#register_error").show()
             error_happens = true
@@ -140,7 +145,7 @@ $(function() {
             error_happens = true
         }
  
-        if (!error_happens) {
+        if (!error_happens) {  // Validate purchasing.
             $.ajax({
                 type: "POST",
                 url: "/workflow/purc-reg/",

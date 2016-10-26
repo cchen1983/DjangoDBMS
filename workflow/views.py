@@ -184,6 +184,7 @@ def purc_reg(request):
 
     return HttpResponse(resp)
 
+# Yihang Zhao @ 20161018
 # New Promotion Handler
 @login_required
 def act_promo_reg(request):
@@ -200,6 +201,7 @@ def act_promo_reg(request):
     promo.save()
     return HttpResponse(resp)
 
+# Saheed @ 20161019
 # New Discount Handler
 @login_required
 def act_discount_reg(request):
@@ -220,6 +222,7 @@ def act_discount_reg(request):
         
     return HttpResponse(resp)
 
+# cchen @ 20161020
 # Query discount and promotion info
 @login_required
 def act_info_get(request):
@@ -232,6 +235,8 @@ def act_info_get(request):
 
     try:
         today = datetime.datetime.now().date()
+
+        # get active discount info
         dclist = Discount.objects.all()
         active_discount = None
         if len(dclist) > 0:
@@ -240,7 +245,7 @@ def act_info_get(request):
             disc_tgt = active_discount.target
             disc = active_discount.disc
 
-        print "testing"
+        # get promotion info for selected product
         promo = Promotion.objects.get(productNo=productNo)
         print promo
         if promo.valid_from.date() <= today and promo.valid_to.date() >= today:

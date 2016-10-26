@@ -64,6 +64,7 @@ TGT_BD = 'Birthday'
 #PROMO_N_GET_1 = 'PM_N1'     # Promotion Buy N get 1
 #PROMO_DISCOUNT = 'PM_DC'    # Promotion Discount
 
+# cchen @ 20161009
 class Activity(models.Model):
     valid_from = models.DateTimeField(auto_now_add=True)
     valid_to = models.DateTimeField(auto_now_add=True)
@@ -78,7 +79,7 @@ class Discount(Activity):
         Discount.objects.all().delete()
         super(Discount, self).save()
         
-        
+# Yihang Zhao @  20161011       
 # Promotion for specific product
 class Promotion(Activity):
     productNo = models.ForeignKey(Product, related_name='promotion', blank=True, null=True, on_delete=models.SET_NULL)
