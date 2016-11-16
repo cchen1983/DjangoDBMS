@@ -1,10 +1,16 @@
 # Django View Handler for Query Page
 # cchen @ 2016.9.6
+import sys
+import subprocess
+import os
+import datetime
 
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.template import RequestContext, loader
 from django.contrib.auth.decorators import login_required
+
+from django.core.management import call_command
 
 #from mysqlUtils import dbQuery
 
@@ -94,3 +100,34 @@ def tuple_update(request):
         resp = 'submit error.'
 
     return HttpResponse(resp)
+
+
+# Recover database from specified date backup
+@login_required
+def restore_date(request):
+    resp = 'Restore successes!'
+
+    try:
+        bak_date = request.POST.get('bak_date')
+        print 'restore from backup date: ' + bak_date
+        call_command('loaddata', str(bak_date) + '.json', verbosity=3, interactive=False)
+    except:
+        resp = sys.exc_info()[0]
+
+    return HttpResponse(resp)
+
+# Backup database of current date
+@login_required
+def backup_date(request):
+    resp = "Backup successes!"
+
+    try:
+        today = datetime.datetime.now().date() 
+        #call_command('dumpdata', '>', str(today) + '.json', verbosity=3, interactive=False)        
+        subprocess.check_call("./manage.py dumpdata > " + str(today) + ".json", shell=True)
+    except:
+        resp = sys.exc_info()[0]    
+    
+    return HttpResponse(resp)
+
+

@@ -35,6 +35,23 @@
            </div>
 
             <div id="backup" class="tab-pane">
+                    <br>
+                    <div class="row">
+                        <button id="btn_backup" type="button" class="btn btn-default btn-block">Backup to Date</button>
+                        <span id="backup_error" class="custom-alert-msg" style="padding: 6px;"></span>
+                    </div>
+                    <br>
+                    <br>
+                    <form method="POST" id="restore_form">{% csrf_token %}
+                        <div class="form-group">
+                            <label>Restore from Date</label>
+                            <input name="bak_date" type="date" class="form-control" >
+                        </div>
+                        <div class="row">
+                            <button type="submit" class="btn btn-default">Restore</button>
+                            <span id="restore_error" class="custom-alert-msg" style="padding: 6px;"></span>
+                        <div>
+                    </form>
             </div>
 
         </div> <!-- tab-content -->
@@ -45,4 +62,5 @@
 
 {% block scripts %}
 <script src="/static/js/apps/query/query_edit.js"></script>
+<script src="/static/js/apps/query/query_backup.js"></script>
 {% endblock %}
