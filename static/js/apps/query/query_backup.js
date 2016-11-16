@@ -1,4 +1,4 @@
-/* Saheed @ 2016.09.06
+/* Yihang Zhao @ 2016.11.12
  * Query: Advance searching and editing of Data Models 
  */
 function getCookie(name) {
